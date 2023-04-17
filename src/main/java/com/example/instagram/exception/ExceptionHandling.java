@@ -1,6 +1,6 @@
 package com.example.instagram.exception;
 
-import com.example.projectfifa.exception.custom.*;
+import com.example.instagram.exception.custom.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
