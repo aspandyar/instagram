@@ -4,32 +4,43 @@ import com.example.instagram.dto.request.user.UserAuthorizationDtoRequest;
 import com.example.instagram.dto.request.user.UserRegistrationDtoRequest;
 import com.example.instagram.dto.response.UserDtoResponse;
 import com.example.instagram.exception.CustomExceptionMessage;
-import com.example.instagram.exception.custom.AlreadyExistException;
-import com.example.instagram.exception.custom.NotFoundException;
-import com.example.instagram.exception.custom.RepositoryCreateException;
+import com.example.instagram.exception.custom.*;
+import com.example.instagram.mapper.UserMapper;
 import com.example.instagram.module.User;
 import com.example.instagram.repository.UserRepository;
+import com.example.instagram.security.JWTTokenProvider;
+import com.example.instagram.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
 
+    @Lazy
     private final AuthenticationManager authenticationManager;
+
+    private final JWTTokenProvider jwtTokenProvider;
 
     private final String USERNAME_ALREADY_EXIST_EXCEPTION = "Данный логин уже занят.";
     private final String AUTHENTICATION_EXCEPTION = "Логин или пароль неправольно введены.";
@@ -77,16 +88,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UserDtoResponse> authorization(UserAuthorizationDtoRequest dtoRequest) {
+    public ResponseEntity<UserDtoResponse> authorization(UserAuthorizationDtoRequest dtoRequest, HttpServletRequest request) {
         String username = dtoRequest.getUsername().toLowerCase().trim();
         String password = dtoRequest.getPassword().trim();
 
-        this.authenticate(username, password);
+        try {
+            this.authenticate(username, password);
+        } catch (Exception e) {
+            if (e.getMessage().equals("User is disabled")) {
+                throw new AuthenticationException(this.AUTHENTICATION_IS_ACTIVE_EXCEPTION);
+            }
 
+            else if (e.getMessage().equals("User account is locked")) {
+                throw new AuthenticationException(this.AUTHENTICATION_IS_NON_LOCKED_EXCEPTION);
+            }
 
+            throw new AuthenticationException(this.AUTHENTICATION_EXCEPTION);
+        }
+        User user = this.getByUsernameThrowException(username);
+        UserPrincipal userPrincipal = new UserPrincipal(user);
+
+        String IP = jwtTokenProvider.getIP(request);
+
+        HttpHeaders httpHeaders = this.getJWTHeader(userPrincipal, IP);
+
+        return new ResponseEntity<>(UserMapper.userToDto(user), httpHeaders, HttpStatus.OK);
+    }
+
+    private HttpHeaders getJWTHeader(UserPrincipal userPrincipal, String IP) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        String JWT = jwtTokenProvider.generateToken(userPrincipal, IP);
+
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, JWT);
+
+        return httpHeaders;
     }
 
     private void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = this.getByUsernameThrowException(username);
+
+        return new UserPrincipal(user);
     }
 }

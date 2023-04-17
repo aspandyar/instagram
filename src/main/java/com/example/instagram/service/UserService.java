@@ -6,6 +6,7 @@ import com.example.instagram.dto.response.UserDtoResponse;
 import com.example.instagram.module.User;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public interface UserService {
@@ -16,5 +17,5 @@ public interface UserService {
 
     User registration(UserRegistrationDtoRequest dtoRequest);
 
-    ResponseEntity<UserDtoResponse> authorization(UserAuthorizationDtoRequest dtoRequest);
+    ResponseEntity<UserDtoResponse> authorization(UserAuthorizationDtoRequest dtoRequest, HttpServletRequest request);
 }
