@@ -11,10 +11,10 @@ public class PostMapper {
         postDtoResponse.setId(post.getId());
 
         postDtoResponse.setBody(post.getBody());
-
-        if(post.getUser() != null) {
-            postDtoResponse.setUser(UserMapper.userToDto(post.getUser()));
-        }
+//
+//        if(post.getUser() != null) {
+//            postDtoResponse.setUser(UserMapper.userToDto(post.getUser()));
+//        }
 
         postDtoResponse.setLocalDateTime(post.getLocalDateTime());
 

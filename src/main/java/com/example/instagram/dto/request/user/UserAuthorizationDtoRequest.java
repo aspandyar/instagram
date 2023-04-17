@@ -1,11 +1,11 @@
-package com.example.instagram.dto.request;
+package com.example.instagram.dto.request.user;
 
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class UserDtoRequest {
+public class UserAuthorizationDtoRequest {
 
     private String username;
 
