@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final BCryptPasswordEncoder encoder;
 
-    @Lazy
     private final AuthenticationManager authenticationManager;
 
     private final JWTTokenProvider jwtTokenProvider;
@@ -75,10 +74,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             createdUser.setPassword(encoder.encode(password));
 
-            LocalDateTime localDateTime = LocalDateTime.now();
-
-            createdUser.setLocalDateTime(localDateTime);
-
 
             return this.save(createdUser);
         } catch (Exception e) {
@@ -105,14 +100,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             throw new AuthenticationException(this.AUTHENTICATION_EXCEPTION);
         }
-        User user = this.getByUsernameThrowException(username);
-        UserPrincipal userPrincipal = new UserPrincipal(user);
 
-        String IP = jwtTokenProvider.getIP(request);
+        try {
+            User user = this.getByUsernameThrowException(username);
+            UserPrincipal userPrincipal = new UserPrincipal(user);
 
-        HttpHeaders httpHeaders = this.getJWTHeader(userPrincipal, IP);
+            String IP = jwtTokenProvider.getIP(request);
 
-        return new ResponseEntity<>(UserMapper.userToDto(user), httpHeaders, HttpStatus.OK);
+            HttpHeaders httpHeaders = this.getJWTHeader(userPrincipal, IP);
+
+            return new ResponseEntity<>(UserMapper.userToDto(user), httpHeaders, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            throw new UnexpectedException(CustomExceptionMessage.UNEXPECTED_EXCEPTION_MESSAGE);
+        }
     }
 
     private HttpHeaders getJWTHeader(UserPrincipal userPrincipal, String IP) {

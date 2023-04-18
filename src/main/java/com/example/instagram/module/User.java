@@ -28,4 +28,10 @@ public class User {
 
     @Column(name = "created_date")
     private LocalDateTime localDateTime;
+
+    @PrePersist
+    private void prePersist() {
+        this.localDateTime = LocalDateTime.now();
+    }
 }
+

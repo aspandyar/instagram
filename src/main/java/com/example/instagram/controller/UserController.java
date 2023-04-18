@@ -3,6 +3,7 @@ package com.example.instagram.controller;
 import com.example.instagram.dto.request.user.UserAuthorizationDtoRequest;
 import com.example.instagram.dto.request.user.UserRegistrationDtoRequest;
 import com.example.instagram.dto.response.UserDtoResponse;
+import com.example.instagram.exception.ExceptionHandling;
 import com.example.instagram.module.User;
 import com.example.instagram.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends ExceptionHandling {
 
     private final UserService userService;
 
