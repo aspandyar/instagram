@@ -8,31 +8,29 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "post_photo")
 @Getter
 @Setter
-public class Post {
+public class PostPhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "body")
-    private String body;
+    @Column(name = "directions")
+    private String directions;
 
-    @Column(name = "like_count")
-    private Long likeCount;
-
-    @Column(name = "dislike_count")
-    private Long dislikeCount;
+    @Column(name = "queue")
+    private Integer queue;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @Column(name = "created_date")
     private LocalDateTime localDateTime;
 
     @PrePersist
     private void prePersist(){this.localDateTime = LocalDateTime.now();}
+
 }

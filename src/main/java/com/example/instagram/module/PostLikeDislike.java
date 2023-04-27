@@ -8,23 +8,21 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "post_like_dislike")
 @Getter
 @Setter
-public class Post {
+public class PostLikeDislike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "body")
-    private String body;
+    @Column(name = "is_like")
+    private Boolean isLike;
 
-    @Column(name = "like_count")
-    private Long likeCount;
-
-    @Column(name = "dislike_count")
-    private Long dislikeCount;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

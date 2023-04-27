@@ -6,17 +6,17 @@ import com.example.instagram.module.Post;
 public class PostMapper {
 
     public static PostDtoResponse postToDto(Post post) {
+
         PostDtoResponse postDtoResponse = new PostDtoResponse();
 
-        postDtoResponse.setId(post.getId());
-
         postDtoResponse.setBody(post.getBody());
-//
-//        if(post.getUser() != null) {
-//            postDtoResponse.setUser(UserMapper.userToDto(post.getUser()));
-//        }
-
+        postDtoResponse.setLikeCount(post.getLikeCount());
+        postDtoResponse.setDislikeCount(post.getDislikeCount());
         postDtoResponse.setLocalDateTime(post.getLocalDateTime());
+
+        if (post.getUser() != null) {
+            postDtoResponse.setUser(UserMapper.userToDto(post.getUser()));
+        }
 
         return postDtoResponse;
     }

@@ -3,7 +3,7 @@ package com.example.instagram.service;
 import com.example.instagram.dto.request.user.UserAuthorizationDtoRequest;
 import com.example.instagram.dto.request.user.UserRegistrationDtoRequest;
 import com.example.instagram.dto.response.UserDtoResponse;
-import com.example.instagram.module.User;
+import com.example.instagram.module.security.User;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;

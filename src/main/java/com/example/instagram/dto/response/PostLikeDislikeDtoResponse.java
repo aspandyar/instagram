@@ -1,6 +1,5 @@
 package com.example.instagram.dto.response;
 
-import com.example.instagram.module.security.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,13 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostDtoResponse {
+public class PostLikeDislikeDtoResponse {
 
-    private String body;
+    private Boolean isLike;
 
-    private Long likeCount;
-
-    private Long dislikeCount;
+    private PostDtoResponse post;
 
     private UserDtoResponse user;
 

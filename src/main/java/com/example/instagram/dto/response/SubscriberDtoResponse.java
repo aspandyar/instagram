@@ -8,15 +8,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostDtoResponse {
-
-    private String body;
-
-    private Long likeCount;
-
-    private Long dislikeCount;
+public class SubscriberDtoResponse {
 
     private UserDtoResponse user;
+
+    private UserDtoResponse subscriberUser;
 
     private LocalDateTime localDateTime;
 }

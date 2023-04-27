@@ -6,15 +6,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter
-public class PostDtoRequest {
+public class SubscriberDtoRequest {
 
-    private String body;
+    private Long userId;
 
-    private Long likeCount;
-
-    private Long dislikeCount;
-
-    private Long UserId;
+    private Long subscriberUserId;
 
     private LocalDateTime localDateTime;
 }

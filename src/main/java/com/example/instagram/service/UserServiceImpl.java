@@ -6,7 +6,7 @@ import com.example.instagram.dto.response.UserDtoResponse;
 import com.example.instagram.exception.CustomExceptionMessage;
 import com.example.instagram.exception.custom.*;
 import com.example.instagram.mapper.UserMapper;
-import com.example.instagram.module.User;
+import com.example.instagram.module.security.User;
 import com.example.instagram.repository.UserRepository;
 import com.example.instagram.security.JWTTokenProvider;
 import com.example.instagram.security.UserPrincipal;
@@ -25,7 +25,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -37,6 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final BCryptPasswordEncoder encoder;
 
+    @Lazy
     private final AuthenticationManager authenticationManager;
 
     private final JWTTokenProvider jwtTokenProvider;
@@ -45,6 +45,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final String AUTHENTICATION_EXCEPTION = "Логин или пароль неправольно введены.";
     private final String AUTHENTICATION_IS_ACTIVE_EXCEPTION = "Ваш аккаунт не активен.";
     private final String AUTHENTICATION_IS_NON_LOCKED_EXCEPTION = "Ваш аккаунт заблокирован.";
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = this.getByUsernameThrowException(username);
+
+        return new UserPrincipal(user);
+    }
 
     @Override
     public Optional<User> getByUsername(String username) {
@@ -56,7 +63,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.getByUsername(username).orElseThrow(() -> new NotFoundException(CustomExceptionMessage.NOT_FOUND_EXCEPTION_MESSAGE));
     }
 
-    private User save(User user) {return userRepository.save(user);}
+    private User save(User user) {
+        return userRepository.save(user);
+    }
 
     @Override
     public User registration(UserRegistrationDtoRequest dtoRequest) {
@@ -65,15 +74,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         Optional<User> user = this.getByUsername(username);
 
-        if(user.isPresent()) throw new AlreadyExistException(this.USERNAME_ALREADY_EXIST_EXCEPTION);
+        if (user.isPresent()) throw new AlreadyExistException(this.USERNAME_ALREADY_EXIST_EXCEPTION);
 
         try {
             User createdUser = new User();
 
             createdUser.setUsername(username);
-
             createdUser.setPassword(encoder.encode(password));
-
 
             return this.save(createdUser);
         } catch (Exception e) {
@@ -88,7 +95,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String password = dtoRequest.getPassword().trim();
 
         try {
-            this.authenticate(username, password);
+            this.authentication(username, password);
         } catch (Exception e) {
             if (e.getMessage().equals("User is disabled")) {
                 throw new AuthenticationException(this.AUTHENTICATION_IS_ACTIVE_EXCEPTION);
@@ -97,7 +104,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             else if (e.getMessage().equals("User account is locked")) {
                 throw new AuthenticationException(this.AUTHENTICATION_IS_NON_LOCKED_EXCEPTION);
             }
-
+//            System.out.println(e.getMessage());
             throw new AuthenticationException(this.AUTHENTICATION_EXCEPTION);
         }
 
@@ -112,7 +119,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return new ResponseEntity<>(UserMapper.userToDto(user), httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-
             throw new UnexpectedException(CustomExceptionMessage.UNEXPECTED_EXCEPTION_MESSAGE);
         }
     }
@@ -127,14 +133,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return httpHeaders;
     }
 
-    private void authenticate(String username, String password) {
+    private void authentication(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.getByUsernameThrowException(username);
-
-        return new UserPrincipal(user);
     }
 }

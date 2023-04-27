@@ -8,10 +8,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "post_comments")
 @Getter
 @Setter
-public class Post {
+public class PostComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,9 @@ public class Post {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "like_count")
-    private Long likeCount;
-
-    @Column(name = "dislike_count")
-    private Long dislikeCount;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
