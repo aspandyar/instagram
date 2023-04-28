@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 public class PostPhotoDtoResponse {
 
+    private Long id;
+
     private String directions;
 
     private Integer queue;

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "post_like_dislike")
+@Table(name = "post_likes_dislikes")
 @Getter
 @Setter
 public class PostLikeDislike {

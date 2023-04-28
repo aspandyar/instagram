@@ -9,6 +9,7 @@ public class PostPhotoMapper {
 
         PostPhotoDtoResponse postPhotoDtoResponse = new PostPhotoDtoResponse();
 
+        postPhotoDtoResponse.setId(postPhoto.getId());
         postPhotoDtoResponse.setDirections(postPhoto.getDirections());
         postPhotoDtoResponse.setQueue(postPhotoDtoResponse.getQueue());
 

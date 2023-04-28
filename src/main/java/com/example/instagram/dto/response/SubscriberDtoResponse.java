@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 public class SubscriberDtoResponse {
 
+    private Long id;
+
     private UserDtoResponse user;
 
     private UserDtoResponse subscriberUser;

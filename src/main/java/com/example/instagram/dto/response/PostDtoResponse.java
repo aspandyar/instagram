@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 public class PostDtoResponse {
 
+    private Long id;
+
     private String body;
 
     private Long likeCount;

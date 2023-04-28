@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 public class PostCommentDtoResponse {
 
+    private Long id;
+
     private String body;
 
     private UserDtoResponse user;

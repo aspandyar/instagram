@@ -9,6 +9,7 @@ public class PostMapper {
 
         PostDtoResponse postDtoResponse = new PostDtoResponse();
 
+        postDtoResponse.setId(post.getId());
         postDtoResponse.setBody(post.getBody());
         postDtoResponse.setLikeCount(post.getLikeCount());
         postDtoResponse.setDislikeCount(post.getDislikeCount());

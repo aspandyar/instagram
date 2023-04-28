@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Setter
 public class PostLikeDislikeDtoResponse {
 
+    private Long id;
+
     private Boolean isLike;
 
     private PostDtoResponse post;

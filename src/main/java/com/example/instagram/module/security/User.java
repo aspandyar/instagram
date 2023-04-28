@@ -45,11 +45,11 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "is_active", columnDefinition = "boolean default false")
+    @Column(name = "is_active")
     @Generated(GenerationTime.INSERT)
     private Boolean isActive;
 
-    @Column(name = "is_non_locked", columnDefinition = "boolean default false")
+    @Column(name = "is_non_locked")
     @Generated(GenerationTime.INSERT)
     private Boolean isNonLocked;
 }

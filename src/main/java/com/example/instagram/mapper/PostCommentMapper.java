@@ -9,8 +9,9 @@ public class PostCommentMapper {
 
         PostCommentDtoResponse postCommentDtoResponse = new PostCommentDtoResponse();
 
-        postComment.setBody(postComment.getBody());
-        postComment.setLocalDateTime(postComment.getLocalDateTime());
+        postCommentDtoResponse.setId(postComment.getId());
+        postCommentDtoResponse.setBody(postComment.getBody());
+        postCommentDtoResponse.setLocalDateTime(postComment.getLocalDateTime());
 
         if (postComment.getUser() != null) {
             postCommentDtoResponse.setUser(UserMapper.userToDto(postComment.getUser()));

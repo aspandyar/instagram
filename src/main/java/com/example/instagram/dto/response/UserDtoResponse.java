@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Setter
 public class UserDtoResponse {
 
+    private Long id;
+
     private String username;
 
     private LocalDateTime localDateTime;

@@ -8,6 +8,7 @@ public class UserMapper {
     public static UserDtoResponse userToDto(User user) {
         UserDtoResponse userDtoResponse = new UserDtoResponse();
 
+        userDtoResponse.setId(user.getId());
         userDtoResponse.setUsername(user.getUsername());
         userDtoResponse.setLocalDateTime(user.getLocalDateTime());
 

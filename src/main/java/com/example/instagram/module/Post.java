@@ -3,6 +3,8 @@ package com.example.instagram.module;
 import com.example.instagram.module.security.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,9 +23,11 @@ public class Post {
     private String body;
 
     @Column(name = "like_count")
+    @Generated(GenerationTime.INSERT)
     private Long likeCount;
 
     @Column(name = "dislike_count")
+    @Generated(GenerationTime.INSERT)
     private Long dislikeCount;
 
     @ManyToOne

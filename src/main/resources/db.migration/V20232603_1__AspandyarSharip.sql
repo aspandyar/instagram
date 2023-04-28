@@ -46,9 +46,9 @@ create table post_photos (
 );
 
 create table post_likes_dislikes (
+    id  bigserial primary key,
     user_id bigint references users(id),
     post_id bigint references posts(id),
-    constraint id primary key (user_id, post_id),
     is_like boolean not null,
     created_date timestamp not null
 );

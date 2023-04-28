@@ -9,6 +9,7 @@ public class SubscriberMapper {
 
         SubscriberDtoResponse subscriberDtoResponse = new SubscriberDtoResponse();
 
+        subscriberDtoResponse.setId(subscriber.getId());
         subscriberDtoResponse.setLocalDateTime(subscriber.getLocalDateTime());
 
         if (subscriber.getUser() != null) {

@@ -9,8 +9,9 @@ public class PostLikeDislikeMapper {
 
         PostLikeDislikeDtoResponse postLikeDislikeDtoResponse = new PostLikeDislikeDtoResponse();
 
-        postLikeDislike.setLocalDateTime(postLikeDislike.getLocalDateTime());
-        postLikeDislike.setIsLike(postLikeDislike.getIsLike());
+        postLikeDislikeDtoResponse.setId(postLikeDislike.getId());
+        postLikeDislikeDtoResponse.setLocalDateTime(postLikeDislike.getLocalDateTime());
+        postLikeDislikeDtoResponse.setIsLike(postLikeDislike.getIsLike());
 
         if (postLikeDislike.getUser() != null) {
             postLikeDislikeDtoResponse.setUser(UserMapper.userToDto(postLikeDislike.getUser()));
