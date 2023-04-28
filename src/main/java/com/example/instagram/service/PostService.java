@@ -12,5 +12,5 @@ public interface PostService {
 
     Post getByIdThrowException(Long id);
 
-
+    Post create(PostDtoRequest dtoRequest);
 }

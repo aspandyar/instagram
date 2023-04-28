@@ -136,4 +136,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private void authentication(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
+
+    @Override
+    public Optional<User> getById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public User getByIdThrownException(Long id) {
+        return this.getById(id).orElseThrow(() -> new NotFoundException(CustomExceptionMessage.NOT_FOUND_EXCEPTION_MESSAGE));
+    }
 }

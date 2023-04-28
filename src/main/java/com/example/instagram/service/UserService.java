@@ -11,6 +11,10 @@ import java.util.Optional;
 
 public interface UserService {
 
+    Optional<User> getById(Long id);
+
+    User getByIdThrownException(Long id);
+
     Optional<User> getByUsername(String username);
 
     User getByUsernameThrowException(String username);
@@ -18,4 +22,5 @@ public interface UserService {
     User registration(UserRegistrationDtoRequest dtoRequest);
 
     ResponseEntity<UserDtoResponse> authorization(UserAuthorizationDtoRequest dtoRequest, HttpServletRequest request);
+
 }

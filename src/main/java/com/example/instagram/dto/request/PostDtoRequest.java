@@ -14,7 +14,7 @@ public class PostDtoRequest {
 
     private Long dislikeCount;
 
-    private Long UserId;
+    private Long userId;
 
     private LocalDateTime localDateTime;
 }
