@@ -20,4 +20,10 @@ public interface PostService {
     Post update(PostDtoRequest dtoRequest, Long id);
 
     void delete(Long id);
+
+    void createLikeDislike(Long id, Boolean isLike);
+
+    void updateLikeDislike(Long postId, Long postLikeId, Boolean isLike);
+
+    void deleteLikeDislike(Long id, Boolean isLike);
 }

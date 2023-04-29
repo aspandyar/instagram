@@ -13,6 +13,10 @@ public class PostCommentMapper {
         postCommentDtoResponse.setBody(postComment.getBody());
         postCommentDtoResponse.setLocalDateTime(postComment.getLocalDateTime());
 
+        if (postComment.getPostComment() != null) {
+            postCommentDtoResponse.setPostComment(PostCommentMapper.postCommentToDto(postComment.getPostComment()));
+        }
+
         if (postComment.getUser() != null) {
             postCommentDtoResponse.setUser(UserMapper.userToDto(postComment.getUser()));
         }

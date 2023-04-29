@@ -61,6 +61,8 @@ public class PostLikeDislikeServiceImpl implements PostLikeDislikeService {
             postLikeDislike.setUser(user);
             postLikeDislike.setPost(post);
 
+            postService.createLikeDislike(postId, dtoRequest.getIsLike());
+
             return this.save(postLikeDislike);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -75,6 +77,10 @@ public class PostLikeDislikeServiceImpl implements PostLikeDislikeService {
         try {
             postLikeDislike.setIsLike(dtoRequest.getIsLike());
 
+            Long postId = postLikeDislike.getPost().getId();
+
+            postService.updateLikeDislike(postId, id, postLikeDislike.getIsLike());
+
             return this.save(postLikeDislike);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -87,6 +93,7 @@ public class PostLikeDislikeServiceImpl implements PostLikeDislikeService {
         PostLikeDislike postLikeDislike = this.getByIdThrowException(id);
 
         try {
+            postService.deleteLikeDislike(id, postLikeDislike.getIsLike());
             postLikeDislikeRepository.delete(postLikeDislike);
         } catch (Exception e) {
             log.error(e.getMessage());

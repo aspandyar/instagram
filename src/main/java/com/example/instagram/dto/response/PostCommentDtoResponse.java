@@ -19,5 +19,7 @@ public class PostCommentDtoResponse {
 
     private PostDtoResponse post;
 
+    private PostCommentDtoResponse postComment;
+
     private LocalDateTime localDateTime;
 }

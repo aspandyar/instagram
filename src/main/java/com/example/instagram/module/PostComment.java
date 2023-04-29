@@ -28,6 +28,10 @@ public class PostComment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "post_comment_id")
+    private PostComment postComment;
+
     @Column(name = "created_date")
     private LocalDateTime localDateTime;
 

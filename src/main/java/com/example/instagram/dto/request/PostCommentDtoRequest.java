@@ -14,5 +14,7 @@ public class PostCommentDtoRequest {
 
     private Long postId;
 
+    private Long postCommentId;
+
     private LocalDateTime localDateTime;
 }

@@ -7,10 +7,12 @@ import com.example.instagram.exception.custom.RepositoryCreateException;
 import com.example.instagram.exception.custom.RepositoryDeleteException;
 import com.example.instagram.exception.custom.RepositoryUpdateException;
 import com.example.instagram.module.Post;
+import com.example.instagram.module.PostLikeDislike;
 import com.example.instagram.module.security.User;
 import com.example.instagram.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -25,6 +27,9 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     private final UserService userService;
+
+    @Lazy
+    private final PostLikeDislikeService postLikeDislikeService;
 
     @Override
     public Optional<Post> getById(Long id) {
@@ -91,6 +96,68 @@ public class PostServiceImpl implements PostService {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RepositoryDeleteException(CustomExceptionMessage.DELETE_EXCEPTION_MESSAGE);
+        }
+    }
+
+    @Override
+    public void createLikeDislike(Long id, Boolean isLike) {
+        Post post = this.getByIdThrowException(id);
+
+        try {
+            if (isLike != null) {
+                if (isLike) {
+                    post.setLikeCount(post.getLikeCount() + 1);
+                } else {
+                    post.setDislikeCount(post.getDislikeCount() + 1);
+                }
+
+                this.save(post);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("");
+        }
+    }
+
+    @Override
+    public void updateLikeDislike(Long postId, Long postLikeId, Boolean isLike) {
+        PostLikeDislike postLikeDislike = postLikeDislikeService.getByIdThrowException(postLikeId);
+        Post post = this.getByIdThrowException(postId);
+
+        try {
+            if (isLike != null) {
+            if (isLike != postLikeDislike.getIsLike()) {
+                if (isLike) {
+                    post.setLikeCount(post.getLikeCount() + 1);
+                    post.setDislikeCount(post.getDislikeCount() - 1);
+                } else {
+                    post.setDislikeCount(post.getDislikeCount() + 1);
+                    post.setLikeCount(post.getLikeCount() - 1);
+                }
+            }
+
+            this.save(post);}
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("");
+        }
+    }
+
+    @Override
+    public void deleteLikeDislike(Long id, Boolean isLike) {
+        Post post = this.getByIdThrowException(id);
+
+        try {if(isLike != null) {
+            if (isLike) {
+                post.setLikeCount(post.getLikeCount() - 1);
+            } else {
+                post.setDislikeCount(post.getDislikeCount() - 1);
+            }
+
+            this.save(post);}
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("");
         }
     }
 }

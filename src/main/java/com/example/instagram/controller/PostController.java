@@ -1,14 +1,19 @@
 package com.example.instagram.controller;
 
+import com.example.instagram.dto.request.PostCommentDtoRequest;
 import com.example.instagram.dto.request.PostDtoRequest;
 import com.example.instagram.dto.request.PostLikeDislikeDtoRequest;
+import com.example.instagram.dto.response.PostCommentDtoResponse;
 import com.example.instagram.dto.response.PostDtoResponse;
 import com.example.instagram.dto.response.PostLikeDislikeDtoResponse;
+import com.example.instagram.mapper.PostCommentMapper;
 import com.example.instagram.mapper.PostLikeDislikeMapper;
 import com.example.instagram.mapper.PostMapper;
 import com.example.instagram.module.Post;
+import com.example.instagram.module.PostComment;
 import com.example.instagram.module.PostLikeDislike;
 import com.example.instagram.repository.PostRepository;
+import com.example.instagram.service.PostCommentService;
 import com.example.instagram.service.PostLikeDislikeService;
 import com.example.instagram.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,8 @@ public class PostController {
     private final PostService postService;
 
     private final PostLikeDislikeService postLikeDislikeService;
+
+    private final PostCommentService postCommentService;
 
 //    @GetMapping("/")
 //    public ResponseEntity<PostDtoResponse> getAll() {
@@ -87,13 +94,37 @@ public class PostController {
     }
 
     @DeleteMapping("/delete/like/{post_id}")
-    public ResponseEntity<PostLikeDislike> deleteLike(@PathVariable(name = "post_id") Long id) {
+    public ResponseEntity<PostLikeDislikeDtoResponse> deleteLike(@PathVariable(name = "post_id") Long id) {
         postLikeDislikeService.delete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
+    @PostMapping("/comment/create")
+    public ResponseEntity<PostCommentDtoResponse> addComment(@Valid @RequestBody PostCommentDtoRequest dtoRequest, Principal principal) {
+        PostComment postComment = postCommentService.create(dtoRequest, principal);
 
+        PostCommentDtoResponse dtoResponse = PostCommentMapper.postCommentToDto(postComment);
 
+        return new ResponseEntity<>(dtoResponse, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/comment/update/{post_id}")
+    public ResponseEntity<PostCommentDtoResponse> changeComment(@Valid @RequestBody PostCommentDtoRequest dtoRequest,
+                                                         @PathVariable(name = "post_id")Long postId) {
+        PostComment postComment = postCommentService.update(dtoRequest, postId);
+
+        PostCommentDtoResponse dtoResponse = PostCommentMapper.postCommentToDto(postComment);
+
+        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/comment/delete/{post_id}")
+    public ResponseEntity<PostCommentDtoResponse> deleteComment(@PathVariable(name = "post_id") Long id) {
+
+        postCommentService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

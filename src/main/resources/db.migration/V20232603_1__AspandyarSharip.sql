@@ -58,7 +58,7 @@ create table post_comments (
     body text not null,
     post_id bigint not null,
     user_id bigint not null,
-    post_comment_id bigint not null,
+    post_comment_id bigint,
     foreign key(post_comment_id) references post_comments(id),
     foreign key(post_id) references posts(id),
     foreign key(user_id) references users(id),
