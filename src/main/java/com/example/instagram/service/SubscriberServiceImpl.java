@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,11 @@ public class SubscriberServiceImpl implements SubscriberService {
 
     private Subscriber save(Subscriber subscriber) {
         return subscriberRepository.save(subscriber);
+    }
+
+    @Override
+    public List<Subscriber> getAll() {
+        return subscriberRepository.findAll();
     }
 
     @Override

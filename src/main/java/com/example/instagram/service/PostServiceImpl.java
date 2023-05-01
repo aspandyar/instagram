@@ -136,7 +136,8 @@ public class PostServiceImpl implements PostService {
                 }
             }
 
-            this.save(post);}
+            this.save(post);
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException("");

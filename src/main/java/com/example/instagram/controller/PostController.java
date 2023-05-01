@@ -12,19 +12,19 @@ import com.example.instagram.mapper.PostMapper;
 import com.example.instagram.module.Post;
 import com.example.instagram.module.PostComment;
 import com.example.instagram.module.PostLikeDislike;
-import com.example.instagram.repository.PostRepository;
 import com.example.instagram.service.PostCommentService;
 import com.example.instagram.service.PostLikeDislikeService;
+import com.example.instagram.service.PostPhotoService;
 import com.example.instagram.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/post")
@@ -37,14 +37,17 @@ public class PostController {
 
     private final PostCommentService postCommentService;
 
-//    @GetMapping("/")
-//    public ResponseEntity<PostDtoResponse> getAll() {
-//        List<Post> postList = postService.getAll();
-//
-//        PostDtoResponse dtoResponse = PostMapper.postToDto(postList);
-//
-//        return new ResponseEntity<>(postList, HttpStatus.OK);
-//    }
+    private final PostPhotoService postPhotoService;
+
+    @GetMapping("/")
+    public ResponseEntity<List<PostDtoResponse>> getAllPosts() {
+
+        List<PostDtoResponse> dtoResponses = postService.getAll().stream().map(PostMapper::postToDto)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dtoResponses, HttpStatus.OK);
+
+    }
 
     @PostMapping("/create")
     public ResponseEntity<PostDtoResponse> create(@Valid @RequestBody PostDtoRequest dtoRequest, Principal principal) {
@@ -83,15 +86,15 @@ public class PostController {
         return new ResponseEntity<>(dtoResponse, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/like/{post_id}")
-    public ResponseEntity<PostLikeDislikeDtoResponse> updateLike(@Valid @RequestBody PostLikeDislikeDtoRequest dtoRequest,
-                                                                 @PathVariable(name = "post_id") Long id) {
-        PostLikeDislike postLikeDislike = postLikeDislikeService.update(dtoRequest, id);
-
-        PostLikeDislikeDtoResponse dtoResponse = PostLikeDislikeMapper.postLikeDislikeToDto(postLikeDislike);
-
-        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
-    }
+//    @PutMapping("/update/like/{post_id}")
+//    public ResponseEntity<PostLikeDislikeDtoResponse> updateLike(@Valid @RequestBody PostLikeDislikeDtoRequest dtoRequest,
+//                                                                 @PathVariable(name = "post_id") Long id) {
+//        PostLikeDislike postLikeDislike = postLikeDislikeService.update(dtoRequest, id);
+//
+//        PostLikeDislikeDtoResponse dtoResponse = PostLikeDislikeMapper.postLikeDislikeToDto(postLikeDislike);
+//
+//        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/delete/like/{post_id}")
     public ResponseEntity<PostLikeDislikeDtoResponse> deleteLike(@PathVariable(name = "post_id") Long id) {
@@ -100,6 +103,16 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @GetMapping("/comment/")
+    public ResponseEntity<List<PostCommentDtoResponse>> getAllPostComments() {
+
+        List<PostCommentDtoResponse> dtoResponses = postCommentService.getAll().stream().map(PostCommentMapper::postCommentToDto)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dtoResponses, HttpStatus.OK);
+
+    }
 
     @PostMapping("/comment/create")
     public ResponseEntity<PostCommentDtoResponse> addComment(@Valid @RequestBody PostCommentDtoRequest dtoRequest, Principal principal) {

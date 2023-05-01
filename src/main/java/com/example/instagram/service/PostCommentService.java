@@ -5,6 +5,7 @@ import com.example.instagram.dto.response.PostCommentDtoResponse;
 import com.example.instagram.module.PostComment;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 public interface PostCommentService {
@@ -12,6 +13,8 @@ public interface PostCommentService {
     Optional<PostComment> getById(Long id);
 
     PostComment getByIdThrowException(Long id);
+
+    List<PostComment> getAll();
 
     PostComment create(PostCommentDtoRequest dtoRequest, Principal principal);
 

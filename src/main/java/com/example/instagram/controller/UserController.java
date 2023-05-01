@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -43,6 +45,24 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<UserDtoResponse> authorization(@Valid @RequestBody UserAuthorizationDtoRequest dtoRequest,
                                                          HttpServletRequest request) {
         return userService.authorization(dtoRequest, request);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<UserDtoResponse>> getAll() {
+
+        List<UserDtoResponse> dtoResponses = userService.getAll().stream().map(UserMapper::userToDto)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dtoResponses, HttpStatus.OK);
+    }
+
+    @GetMapping("/subscribers/")
+    public ResponseEntity<List<SubscriberDtoResponse>> getALLSubscribers() {
+
+        List<SubscriberDtoResponse> dtoResponses = subscriberService.getAll().stream().map(SubscriberMapper::subscriberToDto)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dtoResponses, HttpStatus.OK);
     }
 
     @PostMapping("/subscribe/{user_id}")

@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +40,11 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     private PostComment save(PostComment postComment) {
         return postCommentRepository.save(postComment);
+    }
+
+    @Override
+    public List<PostComment> getAll() {
+        return postCommentRepository.findAll();
     }
 
     @Override

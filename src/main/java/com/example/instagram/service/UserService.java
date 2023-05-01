@@ -7,6 +7,7 @@ import com.example.instagram.module.security.User;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -14,6 +15,8 @@ public interface UserService {
     Optional<User> getById(Long id);
 
     User getByIdThrownException(Long id);
+
+    List<User> getAll();
 
     Optional<User> getByUsername(String username);
 

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,11 @@ public class PostPhotoServiceImpl implements PostPhotoService{
     @Override
     public PostPhoto getByIdThrowException(Long id) {
         return getById(id).orElseThrow(() -> new NotFoundException(CustomExceptionMessage.NOT_FOUND_EXCEPTION_MESSAGE));
+    }
+
+    @Override
+    public List<PostPhoto> getAll() {
+        return postPhotoRepository.findAll();
     }
 
     private PostPhoto save(PostPhoto postPhoto) {

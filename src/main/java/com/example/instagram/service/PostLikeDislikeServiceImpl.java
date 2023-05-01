@@ -70,23 +70,17 @@ public class PostLikeDislikeServiceImpl implements PostLikeDislikeService {
         }
     }
 
-    @Override
-    public PostLikeDislike update(PostLikeDislikeDtoRequest dtoRequest, Long id) {
-        PostLikeDislike postLikeDislike = this.getByIdThrowException(id);
-
-        try {
-            postLikeDislike.setIsLike(dtoRequest.getIsLike());
-
-            Long postId = postLikeDislike.getPost().getId();
-
-            postService.updateLikeDislike(postId, id, postLikeDislike.getIsLike());
-
-            return this.save(postLikeDislike);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new RepositoryCreateException(CustomExceptionMessage.UPDATE_EXCEPTION_MESSAGE);
-        }
-    }
+//    @Override
+//    public PostLikeDislike update(PostLikeDislikeDtoRequest dtoRequest, Long id) {
+//        Post post = postService.getByIdThrowException(id);
+//
+//        try {
+//
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            throw new RepositoryCreateException(CustomExceptionMessage.UPDATE_EXCEPTION_MESSAGE);
+//        }
+//    }
 
     @Override
     public void delete(Long id) {

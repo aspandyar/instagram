@@ -18,7 +18,7 @@ public interface PostLikeDislikeService {
 
     PostLikeDislike create(PostLikeDislikeDtoRequest dtoRequest, Principal principal, Long userId);
 
-    PostLikeDislike update(PostLikeDislikeDtoRequest dtoRequest, Long id);
+//    PostLikeDislike update(PostLikeDislikeDtoRequest dtoRequest, Long id);
 
     void delete(Long id);
 }
